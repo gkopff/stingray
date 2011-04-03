@@ -1,0 +1,64 @@
+/* **********************************************************************************
+ * Stingray
+ * 
+ * Copyright 2010 Greg Kopff
+ * All rights reserved.
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ *
+ * ******************************************************************************* */
+ 
+importPackage(Packages.stingray);
+importPackage(Packages.stingray.geometry);
+importPackage(Packages.stingray.texture);
+
+/**
+ *  Scene setup.
+ *  This function must return a reference to the stage.
+ */
+function setup()
+{
+  var stage = new Stage(new Camera(new Vector(150, 10, 500),
+                                   new Vector(0, 10, 700)));
+
+  var f1 = new Finish(0.1,  // ambient 
+                      0.6,  // diffuse
+                      50,   // shininess
+                      0.0); // reflection
+
+  var t = new CheckerTexture(new SimpleTexture(new SolidPigment(Colour.BLUE), f1),
+                             new SimpleTexture(new SolidPigment(Colour.WHITE), f1),
+                             50);
+
+  var s1 = new Sphere(new Vector(  0,   0, 700), 100, new SimpleTexture(new SolidPigment(Colour.GREEN), f1));
+  var s2 = new Sphere(new Vector(100,   0, 700), 100, new SimpleTexture(new SolidPigment(Colour.GREEN), f1));
+  var g = new CsgDifference(s1, s2, new SimpleTexture(new SolidPigment(Colour.MAGENTA), f1));
+
+  // stage.addGeometry(s1);
+  // stage.addGeometry(s2);
+
+  stage.addGeometry(g);
+  
+  stage.addGeometry(new Plane(new Vector(0, 1, 0), -100.1, t));
+
+  stage.addLight(new Light(new Vector(0, 500,   0), Colour.WHITE));
+  // stage.addLight(new Light(new Vector(0, 550, -50), Colour.WHITE.multiply(0.25)));
+
+  return stage;
+}

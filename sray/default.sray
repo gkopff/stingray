@@ -1,0 +1,81 @@
+/* **********************************************************************************
+ * Stingray
+ * 
+ * Copyright 2010 Greg Kopff
+ * All rights reserved.
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ *
+ * ******************************************************************************* */
+ 
+importPackage(Packages.stingray);
+importPackage(Packages.stingray.geometry);
+importPackage(Packages.stingray.texture);
+
+/**
+ *  Scene setup.
+ *  This function must return a reference to the stage.
+ */
+function setup()
+{
+  var stage = new Stage(new Camera(new Vector(10, 10, 200),
+                                   new Vector(0, 10, 700)));
+
+  var green = new Colour(0, 0.80, 0);
+
+  var f1 = new Finish(0.1,  // ambient 
+                      0.6,  // diffuse
+                      50,   // shininess
+                      0.0); // reflection
+
+  var f2 = new Finish(0.15, // ambient 
+                      0.3,  // diffuse
+                      80,   // shininess
+                      0.0); // reflection
+
+  var f3 = new Finish(0.2,  // ambient 
+                      0.7,  // diffuse
+                      50,   // shininess
+                      0.0); // reflection
+
+  var mirror = new Finish(0.0,  // ambient 
+                          0.0,  // diffuse
+                          0,   // shininess
+                          1.0); // reflection
+
+  var t = new CheckerTexture(new SimpleTexture(new SolidPigment(Colour.BLUE), f3),
+                             new SimpleTexture(new SolidPigment(Colour.WHITE), f3),
+                             20);
+  var t2 = new CheckerTexture(new SimpleTexture(new SolidPigment(Colour.RED), f2),
+                              new SimpleTexture(new SolidPigment(Colour.WHITE), f2),
+                              50);
+  var r = new RotatedTexture(t, Vector.Y_NORMAL, 35);
+
+  stage.addGeometry(new Sphere(new Vector(0, 0, 700), 100, new SimpleTexture(new SolidPigment(green), f2)));
+  stage.addGeometry(new Sphere(new Vector(-200, 0, 800), 100, t2));
+  stage.addGeometry(new Sphere(new Vector(200, 0, 600), 100, new SimpleTexture(new SolidPigment(Colour.BLUE), f1)));
+  stage.addGeometry(new Plane(new Vector(0, 1, 0), -100.1, r));
+  stage.addGeometry(new Sphere(new Vector(0, -50, 500), 50, new SimpleTexture(new SolidPigment(Colour.WHITE), mirror)));
+
+  stage.addLight(new Light(new Vector(-100, 500,    0), Colour.WHITE));
+  // stage.addLight(new Light(new Vector( 100, 500,    0), Colour.WHITE));
+  // stage.addLight(new Light(new Vector(-100, 800, -150), Colour.WHITE));
+
+  return stage;
+}
