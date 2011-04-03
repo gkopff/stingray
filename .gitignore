@@ -1,3 +1,5 @@
 build
 output
 lib
+.classpath
+.project
